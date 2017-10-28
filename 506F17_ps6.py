@@ -136,9 +136,15 @@ print("\n*** PROBLEM 6 ***\n")
 
 ## Define your get_airport() function below.
 
+def get_airport(aCode):
+    #### assume that the request module is available at the top of this code ####
+    url_parameters = {'format': 'json'}
+    baseurl = 'http://services.faa.gov/airport/status/'
+    airport = str(aCode)
+    airport_response = requests.get(baseurl + airport, params = url_parameters)
 
-
-
+    airport_data = json.loads(airport_response.text)
+    return airport_data
 
 
 ## [PROBLEM 7] More code generalization
@@ -148,8 +154,14 @@ print("\n*** PROBLEM 7 ***\n")
 ## This function should invoke the get_airport() function from problem 6 inside it.
 ## HINT: What you did for problem 5 may be helpful here!
 
+def extract_airport_data(aCode):
+    airport_data = get_airport(aCode)
 
-
+    airport_code = airport_data['IATA']
+    status_reason = airport_data['status']['reason']
+    current_temp = airport_data['weather']['temp']
+    recent_update = airport_data['weather']['meta']['updated']
+    return (airport_code, status_reason, current_temp, recent_update)
 
 
 
@@ -161,8 +173,9 @@ fav_airports = ['PIT', 'BOS', 'LGA', 'DCA']
 ## Write code here to iterate over the fav_airports list, invoke your extract_airport_data function on each element of the list, and append all of the results to a new list in a variable airport_tuples.
 ## The airport_tuples variable should end up being a list of 4 tuples, each of which contains information about a different airport.
 
-
-
+airport_tuples = []
+for aPort in fav_airports:
+    airport_tuples.append(extract_airport_data(aPort))
 
 
 ## [PROBLEM 9] Dealing with real live data
@@ -176,8 +189,12 @@ possible_airports = ["LAX","PHX","PPT","BOS","JAC","PDX","DTW"]
 
 ## For example, if the string "XYZ" were in the list, you should see: "Sorry, XYZ didn't work." in the console, and all the valid data should still be accumulated into the list poss_airport_tuples.
 
-
-
+poss_airport_tuples = []
+for pAir in possible_airports:
+    try:
+        poss_airport_tuples.append(extract_airport_data(pAir))
+    except:
+        print("Sorry, {} didn't work.".format(pAir))
 
 ## [PROBLEM 10] Using real live data to write a CSV file
 print("\n*** PROBLEM 10 ***\n")
@@ -194,8 +211,14 @@ print("\n*** PROBLEM 10 ***\n")
 ## Since you are iterating over fav_airports in this problem, not possible_airports, you probably do not need to use a try/except clause in THIS problem if you do all the ones it relies upon correctly!
 
 ## Write the code to write your CSV file airport_temps.csv here:
+# import csv
 
-
+# with open('airport_temps.csv', 'w') as aircsv:
+outfile1 = open('airport_temps.csv','w')
+outfile1.write("airport_code, status_reason, current_temp, recent_update\n")
+for airP in airport_tuples:
+    outfile1.write("{}, {}, {}, {}\n".format(*airP))
+outfile1.close()
 
 ## When you're finished, upload your 506W17_ps6.py file to Canvas. Please DO NOT upload the files that your code generates -- your code should generate them when we run it!
 ## Remember that we do not grade files that do not run.

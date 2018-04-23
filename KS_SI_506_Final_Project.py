@@ -26,10 +26,10 @@ def tweet_access(user_name, num_tweets):
 	""" Accept user name(string) and number of tweets(integer) and returns a list of status objects from Twitter. """ 
 
 	# Assign keys & tokens
-	my_key = 'V2WwGMySJT8BR31ZCEwOJkvCl'
-	my_secret = '9YGOUctQBSaCgJev4wuXrMtnis9uia55FRujZslHhA0wLcb9Kz'
-	my_access_token = '2278617690-SzxBHw04AbSpjaSnIj6R6FjoMc6XBZJtpR8x6L1'
-	my_access_token_secret = 'ctTJIS1RbFLclU3z8eWVCiVhBqkHih1cwDEJKZejKPSiX'
+	my_key = ''
+	my_secret = ''
+	my_access_token = ''
+	my_access_token_secret = ''
 
 	# Authorization using keys and token
 	auth = tweepy.OAuthHandler(my_key, my_secret)
